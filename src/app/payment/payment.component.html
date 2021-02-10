@@ -1,0 +1,21 @@
+<div class="left">
+  <input type="text" placeholder="card_number" #cardNumber />
+  <input type="text" placeholder="card_holder" #cardHolder />
+  <input type="date" placeholder="exp_date" #expDate />
+  <input type="number" placeholder="security_code" #securityCode />
+  <input type="number" placeholder="amount" #amount />
+
+  <button
+    (click)="
+      addPayment(
+        cardNumber.value,
+        cardHolder.value,
+        expDate.value,
+        securityCode.value,
+        amount.value
+      )
+    "
+  >
+    Make Payment
+  </button>
+</div>

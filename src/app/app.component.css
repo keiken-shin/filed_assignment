@@ -1,0 +1,39 @@
+/* Header */
+.header {
+  width: 100%;
+  height: 6rem;
+}
+
+.container {
+  max-width: 1180px;
+  height: 100%;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1rem;
+}
+
+.logo svg {
+  width: 80px;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  list-style-type: none;
+  column-gap: 2rem;
+  font-size: 1rem;
+}
+
+.nav-item {
+  font-weight: 500;
+  color: var(--secondary-color);
+  transition: all 0.25s ease-in-out;
+  cursor: pointer;
+}
+
+.nav-item:hover,
+.nav-item:focus {
+  color: var(--primary-color);
+}
