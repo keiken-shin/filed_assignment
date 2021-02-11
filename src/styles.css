@@ -2,10 +2,18 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;1,500&display=swap");
 
 :root {
+  --white: rgb(255, 255, 255);
   --white-color: rgb(247, 247, 247);
   --primary-color: rgb(111, 0, 255);
+  --disable-color: rgb(164, 95, 255);
   --secondary-color: rgb(88, 88, 87);
   --tomato-color: rgb(255, 99, 71);
+
+  --color-stop-1: #d367c1;
+  --color-stop-2: #dedf40;
+  --color-stop-3: #62cb5c;
+  --color-stop-4: #00bbcb;
+  --color-stop-5: #ab79d6;
 
   --shadow-color-1: rgba(88, 88, 87, 0.5);
   --shadow-color-2: rgba(111, 0, 255, 0.5);
@@ -37,9 +45,7 @@ a {
   display: none;
 }
 
-.preload * {
-  -webkit-transition: none !important;
-  -moz-transition: none !important;
-  -ms-transition: none !important;
-  -o-transition: none !important;
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  display: none;
 }

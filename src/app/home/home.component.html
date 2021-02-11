@@ -1,12 +1,45 @@
-<div class="right" *ngIf="payments">
-  <h3>Payments</h3>
-  <ul>
-    <li *ngFor="let payment of payments | async">
-      <p>{{ payment.card_number }}</p>
-      <p>{{ payment.card_holder }}</p>
-      <p>{{ payment.exp_date }}</p>
-      <p>{{ payment.security_code }}</p>
-      <p>{{ payment.amount }}</p>
+<div class="wrapper" *ngIf="payments">
+  <h3 class="title">Payments Information</h3>
+  <ul class="list">
+    <li class="list-item">
+      <p class="list-item__val card_number">
+        <span class="label">card number</span>
+        <span>1234 5678 2381 3235</span>
+      </p>
+      <div class="card_user">
+        <p class="list-item__val card_holder">
+          <span class="label">card holder</span>
+          <span>Dummy Card</span>
+        </p>
+        <p class="list-item__val exp_date">
+          <span class="label">expiry date</span>
+          <span>02/22</span>
+        </p>
+      </div>
+      <div class="list-item__val amount">
+        <span class="label">Total Amount:</span>
+        <span class="amount-val">11223</span>
+      </div>
+    </li>
+    <li *ngFor="let payment of payments | async" class="list-item">
+      <p class="list-item__val card_number">
+        <span class="label">card number</span>
+        <span>{{ payment.card_number }}</span>
+      </p>
+      <div class="card_user">
+        <p class="list-item__val card_holder">
+          <span class="label">card holder</span>
+          <span>{{ payment.card_holder }}</span>
+        </p>
+        <p class="list-item__val exp_date">
+          <span class="label">expiry date</span>
+          <span>{{ payment.exp_date | date: "MM/yy" }}</span>
+        </p>
+      </div>
+      <div class="list-item__val amount">
+        <span class="label">Total Amount:</span>
+        <span class="amount-val">{{ payment.amount }}</span>
+      </div>
     </li>
   </ul>
 </div>

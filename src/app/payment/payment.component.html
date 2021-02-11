@@ -1,8 +1,8 @@
 <div class="card-main">
   <div class="card-wrapper">
     <!-- Credit Card SVG -->
-    <div class="card-display preload">
-      <div class="creditcard">
+    <div class="card-display">
+      <div class="creditcard" (click)="onCardFlip($event)" #creditCard>
         <div class="front">
           <div id="ccsingle"></div>
           <svg
@@ -37,6 +37,7 @@
                 transform="matrix(1 0 0 1 60.106 295.0121)"
                 id="svgnumber"
                 class="st2 st3 st4"
+                #svgNumber
               >
                 {{
                   paymentForm.value.card_number !== ""
@@ -80,9 +81,9 @@
                   class="st2 st5 st9"
                 >
                   {{
-                    paymentForm.value.exp_date !== ""
-                      ? paymentForm.value.exp_date
-                      : "02/2021"
+                    paymentForm.value.exp_date
+                      ? (paymentForm.value.exp_date | date: "MM/yy")
+                      : "02/21"
                   }}
                 </text>
                 <text
@@ -233,9 +234,9 @@
                 class="st6 st7"
               >
                 {{
-                  paymentForm.value.security_code !== ""
+                  paymentForm.value.security_code
                     ? paymentForm.value.security_code
-                    : "953"
+                    : "000"
                 }}
               </text>
               <g class="st8">
@@ -265,7 +266,11 @@
                 id="svgnameback"
                 class="st12 st13"
               >
-                John Doe
+                {{
+                  paymentForm.value.card_holder !== ""
+                    ? paymentForm.value.card_holder
+                    : "Unkown"
+                }}
               </text>
             </g>
           </svg>
@@ -275,6 +280,7 @@
 
     <!-- Payment Form -->
     <form [formGroup]="paymentForm" (ngSubmit)="onSubmit()" class="card-form">
+      <!-- Card Number -->
       <div
         class="form-control"
         [class.is-invalid]="
@@ -282,32 +288,99 @@
           paymentForm.get('card_number').touched
         "
       >
-        <label class="form-control-label" for="card_number">Card Number</label>
+        <label class="form-control-label" for="card_number"
+          >Card Number <small>(min-max: 16)</small></label
+        >
         <input
           class="form-control-input"
           type="text"
+          [imask]="{ mask: '0000 0000 0000 0000' }"
+          (input)="displayVal($event)"
+          [unmask]="true"
           formControlName="card_number"
-          placeholder="XXXX-XXXX-XXXX-XXXX"
+          placeholder="XXXX XXXX XXXX XXXX"
           id="card_number"
           pattern="[0-9]*"
           inputmode="numeric"
+          required
           #cardNumber
         />
+        <!-- Error -->
+        <p
+          class="form-control-error"
+          title="Please provide valid card number"
+          [class.hidden]="
+            paymentForm.get('card_number').valid ||
+            paymentForm.get('card_number').untouched
+          "
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+        </p>
       </div>
 
-      <div class="form-control">
+      <!-- Card Holder -->
+      <div
+        class="form-control"
+        [class.is-invalid]="
+          paymentForm.get('card_holder').invalid &&
+          paymentForm.get('card_holder').touched
+        "
+      >
         <label class="form-control-label" for="card_holder">Card Holder</label>
         <input
           class="form-control-input"
           type="text"
           formControlName="card_holder"
-          placeholder="card_holder"
+          placeholder="Unkown"
           id="card_holder"
+          required
           #cardHolder
         />
+        <!-- Error -->
+        <p
+          class="form-control-error"
+          title="Please provide the card holder name"
+          [class.hidden]="
+            paymentForm.get('card_holder').valid ||
+            paymentForm.get('card_holder').untouched
+          "
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+        </p>
       </div>
 
-      <div class="form-control">
+      <!-- Expiration Date -->
+      <div
+        class="form-control"
+        [class.is-invalid]="
+          paymentForm.get('exp_date').invalid &&
+          paymentForm.get('exp_date').touched
+        "
+      >
         <label class="form-control-label" for="exp_date">Expiration Date</label>
         <input
           class="form-control-input"
@@ -317,22 +390,85 @@
           id="exp_date"
           #expDate
         />
+        <!-- Error -->
+        <p
+          class="form-control-error"
+          title="{{
+            paymentForm.get('exp_date').errors?.expired
+              ? paymentForm.get('exp_date').errors?.expired
+              : 'Please enter vaild expiry date'
+          }}"
+          [class.hidden]="
+            paymentForm.get('exp_date').valid ||
+            paymentForm.get('exp_date').untouched
+          "
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+        </p>
       </div>
 
+      <!-- CVV & Amount -->
       <div class="form-control-group">
-        <div class="form-control">
+        <div
+          class="form-control"
+          [class.is-invalid]="paymentForm.get('security_code').invalid"
+        >
           <label class="form-control-label" for="security_code">CVV</label>
           <input
             class="form-control-input"
             type="number"
+            [imask]="{ mask: '000' }"
+            [unmask]="true"
+            (focus)="onCardFlip($event)"
+            (blur)="onCardFlip($event)"
             formControlName="security_code"
             placeholder="XXX"
+            pattern="[0-9]*"
+            inputmode="numeric"
             id="security_code"
             #securityCode
           />
+          <!-- Error -->
+          <p
+            class="form-control-error"
+            title="Please provide valid security code"
+            [class.hidden]="paymentForm.get('security_code').valid"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+          </p>
         </div>
 
-        <div class="form-control">
+        <div
+          class="form-control"
+          [class.is-invalid]="
+            paymentForm.get('amount').invalid &&
+            paymentForm.get('amount').touched
+          "
+        >
           <label class="form-control-label" for="amount">Total Amount</label>
           <input
             class="form-control-input"
@@ -342,12 +478,46 @@
             id="amount"
             #amount
           />
+          <!-- Error -->
+          <p
+            class="form-control-error"
+            title="Please enter valid amount"
+            [class.hidden]="
+              paymentForm.get('amount').valid ||
+              paymentForm.get('amount').untouched
+            "
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+          </p>
         </div>
       </div>
 
+      <!-- Submit -->
       <div>
-        <button type="submit" class="button-primary">Make Payment</button>
+        <button
+          type="submit"
+          [disabled]="!paymentForm.valid"
+          class="button-primary"
+        >
+          Make Payment
+        </button>
       </div>
     </form>
+  </div>
+
+  <div class="toast" [class.hidden]="!successfull">
+    Payment made successfully!
   </div>
 </div>

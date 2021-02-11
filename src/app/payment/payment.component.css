@@ -1,5 +1,6 @@
 .card-main {
   min-height: calc(100vh - 6rem);
+  position: relative;
 }
 
 .card-wrapper {
@@ -61,6 +62,18 @@
   outline: none;
 }
 
+.form-control-error {
+  position: absolute;
+  right: -0.6rem;
+  top: -0.6rem;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  color: var(--tomato-color);
+  cursor: pointer;
+  background-color: var(--white-color);
+}
+
 .is-invalid {
   border: 1px solid var(--tomato-color);
 }
@@ -90,6 +103,27 @@
   transform: translateY(-5px);
 }
 
+.button-primary:disabled {
+  background-color: var(--disable-color);
+  box-shadow: none;
+}
+
+.button-primary:disabled:hover,
+.button-primary:disabled:focus {
+  box-shadow: none;
+  transform: none;
+}
+
+.toast {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: var(--primary-color);
+  color: var(--white);
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+}
+
 @media (max-width: 768px) {
   .card-wrapper {
     flex-direction: column;
@@ -116,6 +150,7 @@
   max-width: 400px;
   max-height: 251px;
   height: 54vw;
+  font-family: "Courier New", Courier, monospace;
 }
 
 #ccsingle {
